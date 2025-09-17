@@ -1,202 +1,202 @@
 [
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 91,
+    "SQL": "SELECT year, AVG(unemployment_ratio) AS avg_unemployment\nFROM unemployment\nWHERE year IN (1995, 1996)\nGROUP BY year\nORDER BY avg_unemployment DESC\nLIMIT 1;"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 96,
+    "SQL": "SELECT COUNT(*) AS owner_weekly_count\nFROM customers\nWHERE statement_frequency = 'Weekly'\n  AND customer_type = 'Owner';"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 101,
+    "SQL": "SELECT DISTINCT account\nFROM trades\nWHERE trade_date >= '1995-01-01' AND trade_date < '1996-01-01'\n  AND trade_date = (\n    SELECT MIN(trade_date) FROM trades\n    WHERE trade_date >= '1995-01-01' AND trade_date < '1996-01-01'\n  );"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 108,
+    "SQL": "WITH top_client AS (\n  SELECT l.client_id\n  FROM loans l\n  ORDER BY l.amount DESC\n  LIMIT 1\n)\nSELECT (SELECT client_id FROM top_client) AS client_id,\n       t.amount AS first_transaction_amount\nFROM transactions t\nJOIN accounts a ON t.account_id = a.id\nWHERE a.client_id = (SELECT client_id FROM top_client)\n  AND t.transaction_date > a.opened_at\nORDER BY t.transaction_date\nLIMIT 1;"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 117,
+    "SQL": "SELECT 100.0 * SUM(\n  CASE \n    WHEN (\n      (status IN ('Fully Paid','PAID','Paid','completed') OR (COALESCE(paid_amount,0) >= COALESCE(amount,0)))\n      AND (issue IS NULL OR issue = FALSE OR issue = 0 OR LOWER(CAST(issue AS VARCHAR)) IN ('no','false'))\n    ) THEN COALESCE(amount,0)\n    ELSE 0\n  END\n) / NULLIF(SUM(COALESCE(amount,0)),0) AS percent_fully_paid_no_issue\nFROM loans;"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 128,
+    "SQL": "SELECT ah.district,\n       COUNT(*) AS female_count\nFROM account_holders ah\nWHERE LOWER(ah.gender) IN ('female','f')\nGROUP BY ah.district\nORDER BY female_count DESC\nLIMIT 9;"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 136,
+    "SQL": "SELECT COUNT(*) \nFROM loans l\nJOIN accounts a ON l.account_id = a.account_id\nWHERE l.amount >= 250000\n  AND l.approval_date BETWEEN '1995-01-01' AND '1997-12-31'\n  AND (l.status = 'Approved' OR l.approved = 1)\n  AND (a.statement_frequency = 'Monthly' OR a.statement_issuance = 'Monthly');"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 149,
+    "SQL": "SELECT DISTINCT at.name AS account_type, d.avg_income\nFROM account_types at\nJOIN accounts a ON a.account_type_id = at.id\nJOIN (\n  SELECT district_id, AVG(income) AS avg_income\n  FROM residents\n  GROUP BY district_id\n  HAVING AVG(income) > 8000 AND AVG(income) <= 9000\n) d ON d.district_id = a.district_id\nWHERE at.loan_eligible = FALSE;"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 169,
+    "SQL": "WITH male_loans AS (\n  SELECT l.amount::numeric AS amount,\n         EXTRACT(YEAR FROM l.loan_date) AS yr\n  FROM loans l\n  JOIN accounts a ON l.account_id = a.id\n  JOIN clients c ON a.client_id = c.id\n  WHERE LOWER(c.gender) = 'male'\n    AND EXTRACT(YEAR FROM l.loan_date) IN (1996, 1997)\n),\ntotals AS (\n  SELECT\n    COALESCE(SUM(CASE WHEN yr = 1996 THEN amount END), 0) AS total_1996,\n    COALESCE(SUM(CASE WHEN yr = 1997 THEN amount END), 0) AS total_1997\n  FROM male_loans\n)\nSELECT\n  CASE\n    WHEN total_1996 = 0 THEN NULL\n    ELSE (total_1997 - total_1996) / total_1996\n  END AS growth_rate\nFROM totals;"
   },
   {
-    "question_id": "financial",
-    "SQL": {}
+    "question_id": 173,
+    "SQL": "SELECT\n  (SELECT COUNT(*) \n   FROM requests r\n   WHERE r.account_number = 3\n     AND LOWER(COALESCE(r.request_type, '')) LIKE '%account statement%'\n     AND LOWER(COALESCE(r.action, '')) LIKE '%release%') AS statement_request_count,\n  aims.aim AS debit_aim\nFROM (\n  SELECT COALESCE(tr.aim, tr.purpose, tr.description) AS aim\n  FROM transactions tr\n  WHERE tr.account_number = 3\n  GROUP BY COALESCE(tr.aim, tr.purpose, tr.description)\n  HAVING SUM(\n    CASE\n      WHEN tr.is_debit = 1 THEN ABS(tr.amount)\n      WHEN LOWER(COALESCE(tr.debit_credit, '')) = 'debit' THEN ABS(tr.amount)\n      WHEN tr.amount < 0 THEN ABS(tr.amount)\n      ELSE 0\n    END\n  ) = 3539\n) AS aims\nLIMIT 1;"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 393,
+    "SQL": "SELECT COUNT(*) AS count\nFROM cards\nWHERE designer = 'John Avon'\n  AND foil_powerful = FALSE;"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 394,
+    "SQL": "SELECT COUNT(*) FROM cards WHERE lower(coalesce(border, border_color, '')) = 'white' AND CAST(power AS INTEGER) >= 5;"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 406,
+    "SQL": "SELECT id, legal_status\nFROM cards\nWHERE type = 'Creature'\nORDER BY id;"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 411,
+    "SQL": "SELECT a.name\nFROM artist a\nJOIN card c ON c.artist_id = a.id\nWHERE c.text = 'Das perfekte Gegenmittel zu einer dichten Formation';"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 427,
+    "SQL": "SELECT DISTINCT l.name\nFROM sets s\nJOIN printings p ON p.set_id = s.id\nJOIN languages l ON p.language_id = l.id\nJOIN market_listings m ON m.printing_id = p.id\nWHERE s.name = 'Archenemy'\n  AND s.code = 'ARC'\n  AND m.market = 'magic_card_market';"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 432,
+    "SQL": "SELECT s.name, COUNT(*) AS card_count\nFROM cards c\nJOIN sets s ON c.set_id = s.id\nWHERE c.language = 'Russian'\nGROUP BY s.id, s.name\nORDER BY card_count DESC\nLIMIT 1;"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 434,
+    "SQL": "SELECT COUNT(*) \nFROM sets s\nWHERE (s.mtgo_code IS NULL OR s.mtgo = FALSE)\n  AND EXISTS (\n    SELECT 1 FROM set_languages sl WHERE sl.set_id = s.id AND LOWER(sl.language) = 'japanese'\n  )\n  AND NOT EXISTS (\n    SELECT 1 FROM set_languages sl2 WHERE sl2.set_id = s.id AND LOWER(sl2.language) <> 'japanese'\n  );"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 477,
+    "SQL": "SELECT DISTINCT artist\nFROM cards\nWHERE set_name = 'Coldsnap'\n  AND artist IN ('Jeremy Jarvis', 'Aaron Miller', 'Chippy');"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 507,
+    "SQL": "WITH pt_cards AS (\n  SELECT DISTINCT c.id AS card_id, c.set_id, c.online_only\n  FROM cards c\n  JOIN card_translations ct ON ct.card_id = c.id\n  WHERE ct.language_code IN ('pt-BR','pt_BR','ptb','ptbr','Portuguese (Brazil)','Brazilian Portuguese')\n)\nSELECT\n  s.id AS set_id,\n  s.name AS set_name,\n  100.0 * SUM(CASE WHEN pc.online_only = TRUE OR pc.online_only = 1 THEN 1 ELSE 0 END) / COUNT(*) AS pct_online_only\nFROM pt_cards pc\nJOIN sets s ON pc.set_id = s.id\nGROUP BY s.id, s.name\nORDER BY s.id;"
   },
   {
-    "question_id": "card_games",
-    "SQL": {}
+    "question_id": 513,
+    "SQL": "SELECT s.id\nFROM sets s\nJOIN cards c ON c.set_id = s.id\nWHERE s.expansion_type = 'Commander'\n  AND COALESCE(c.is_alchemy_modification, FALSE) = FALSE\nGROUP BY s.id\nORDER BY COUNT(*) DESC\nLIMIT 1;"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 547,
+    "SQL": "SELECT COUNT(*) AS num_posts\nFROM Posts p\nJOIN Users u ON p.OwnerUserId = u.Id\nWHERE u.Age >= 60\n  AND p.Score > 19;"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 550,
+    "SQL": "SELECT TOP 1 p.Body\nFROM Tags AS t\nJOIN Posts AS p ON p.Id = t.ExcerptPostId\nORDER BY t.Count DESC;"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 556,
+    "SQL": "SELECT AVG(badge_count) AS avg_badges\nFROM (\n  SELECT u.Id, COUNT(b.Id) AS badge_count\n  FROM Users u\n  LEFT JOIN Badges b ON b.UserId = u.Id\n  WHERE u.Views > 200\n  GROUP BY u.Id\n) AS sub;"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 558,
+    "SQL": "SELECT COUNT(*) FROM votes WHERE user_id = 58 AND DATE(vote_date) = '2010-07-19';"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 572,
+    "SQL": "SELECT views\nFROM posts\nWHERE title = 'Integration of Weka and/or RapidMiner into Informatica PowerCenter/Developer'\nLIMIT 1;"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 578,
+    "SQL": "SELECT u.DisplayName, u.Reputation\nFROM Posts p\nJOIN Users u ON p.OwnerUserId = u.Id\nWHERE p.Title = 'Understanding what Dassault iSight is doing?';"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 587,
+    "SQL": "SELECT p.title,\n       c.content AS comment,\n       AVG(v.views) AS average_view_count\nFROM posts p\nJOIN post_tags pt ON pt.post_id = p.id\nJOIN tags t ON t.id = pt.tag_id\nJOIN comments c ON c.post_id = p.id\nLEFT JOIN views v ON v.post_id = p.id\nWHERE t.name = 'humor'\nGROUP BY p.id, p.title, c.id, c.content;"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 598,
+    "SQL": "SELECT\n  CASE WHEN cnt2010 = 0 THEN NULL\n       ELSE ROUND((cnt2011 - cnt2010) * 100.0 / cnt2010, 2)\n  END AS percent_difference\nFROM (\n  SELECT\n    SUM(CASE WHEN EXTRACT(YEAR FROM awarded_at) = 2010 THEN 1 ELSE 0 END) AS cnt2010,\n    SUM(CASE WHEN EXTRACT(YEAR FROM awarded_at) = 2011 THEN 1 ELSE 0 END) AS cnt2011\n  FROM student_badges\n) t;"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 639,
+    "SQL": "SELECT\n  CASE WHEN tot = 0 THEN 0\n       ELSE 100.0 * r_count / tot\n  END AS pct_r\nFROM (\n  SELECT\n    COUNT(*) AS tot,\n    SUM(CASE WHEN p.Tags LIKE '%<r>%' THEN 1 ELSE 0 END) AS r_count\n  FROM Posts p\n  LEFT JOIN Users u ON p.OwnerUserId = u.Id\n  WHERE (u.DisplayName = 'Community' OR COALESCE(p.OwnerDisplayName,'') = 'Community')\n) t;"
   },
   {
-    "question_id": "codebase_community",
-    "SQL": {}
+    "question_id": 701,
+    "SQL": "SELECT\n  COALESCE(100.0 * SUM(CASE WHEN p.score > 50 THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0), 0) AS percentage_above_50\nFROM posts p\nWHERE p.owner_user_id IN (\n  SELECT u.id\n  FROM users u\n  WHERE u.reputation = (SELECT MAX(reputation) FROM users)\n);"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 789,
+    "SQL": "SELECT AVG(weight) AS average_weight\nFROM heroes\nWHERE (LOWER(species) = 'alien' OR is_alien = TRUE);"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 793,
+    "SQL": "SELECT COUNT(*) AS male_count\nFROM superheroes\nWHERE (LOWER(race) LIKE '%god%' OR LOWER(race) LIKE '%eternal%')\n  AND (LOWER(gender) = 'male' OR LOWER(gender) = 'm');"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 795,
+    "SQL": "SELECT COUNT(*) AS neutral_count\nFROM superheroes\nWHERE LOWER(alignment) = 'neutral';"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 806,
+    "SQL": "SELECT eye_color\nFROM superheroes\nWHERE full_name = 'Karen Beecher-Duncan';"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 814,
+    "SQL": "SELECT DISTINCT skin_colour\nFROM superheroes\nWHERE attribute_value = 100;"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 817,
+    "SQL": "SELECT DISTINCT race\nFROM superheroes\nWHERE LOWER(gender) = 'male'\n  AND LOWER(hair_color) = 'blue';"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 823,
+    "SQL": "SELECT COUNT(*) AS female_count\nFROM characters c\nJOIN publishers p ON c.publisher_id = p.id\nWHERE c.gender = 'Female' AND p.name = 'Marvel Comics';"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 829,
+    "SQL": "WITH dc AS (\n  SELECT COUNT(*) AS cnt\n  FROM characters c\n  JOIN publishers p ON c.publisher_id = p.id\n  WHERE p.name ILIKE '%dc%'\n    AND (\n      COALESCE(c.is_superhero::text, '') = 'true'\n      OR LOWER(COALESCE(c.type, '')) = 'superhero'\n      OR LOWER(COALESCE(c.category, '')) = 'superhero'\n    )\n),\nmarvel AS (\n  SELECT COUNT(*) AS cnt\n  FROM characters c\n  JOIN publishers p ON c.publisher_id = p.id\n  WHERE p.name ILIKE '%marvel%'\n    AND (\n      COALESCE(c.is_superhero::text, '') = 'true'\n      OR LOWER(COALESCE(c.type, '')) = 'superhero'\n      OR LOWER(COALESCE(c.category, '')) = 'superhero'\n    )\n)\nSELECT\n  CASE\n    WHEN dc.cnt > marvel.cnt THEN 'DC'\n    WHEN marvel.cnt > dc.cnt THEN 'Marvel'\n    ELSE 'Tie'\n  END AS winner,\n  ABS(dc.cnt - marvel.cnt) AS difference\nFROM dc, marvel;"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 834,
+    "SQL": "SELECT\n  100.0 * SUM(CASE WHEN LOWER(s.gender) IN ('female','f','woman') THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0) AS percentage_female\nFROM superheroes s\nLEFT JOIN creators c ON s.creator_id = c.id\nWHERE COALESCE(c.name, s.creator) = 'George Lucas';"
   },
   {
-    "question_id": "superhero",
-    "SQL": {}
+    "question_id": 835,
+    "SQL": "SELECT ROUND(100.0 * SUM(CASE WHEN LOWER(alignment) = 'good' THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0), 2) AS percent_good\nFROM superheroes\nWHERE LOWER(publisher) LIKE '%marvel%';"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1470,
+    "SQL": "SELECT COUNT(DISTINCT s.id) AS station_count\nFROM stations s\nJOIN station_fuels sf ON sf.station_id = s.id\nJOIN fuels f ON f.id = sf.fuel_id\nWHERE (s.country = 'CZE' OR s.country_code = 'CZE')\n  AND f.name = 'Premium';"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1477,
+    "SQL": "SELECT EXTRACT(YEAR FROM date) AS year, SUM(paid_eur) AS total_paid_eur\nFROM gas_usage\nGROUP BY year\nORDER BY total_paid_eur DESC\nLIMIT 1;"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1476,
+    "SQL": "SELECT\n  COALESCE(SUM(CASE WHEN c.currency = 'CZK' THEN g.consumption ELSE 0 END), 0) AS czk_total,\n  COALESCE(SUM(CASE WHEN c.currency = 'EUR' THEN g.consumption ELSE 0 END), 0) AS eur_total,\n  COALESCE(SUM(CASE WHEN c.currency = 'CZK' THEN g.consumption ELSE 0 END), 0)\n    - COALESCE(SUM(CASE WHEN c.currency = 'EUR' THEN g.consumption ELSE 0 END), 0) AS difference\nFROM gas_usage g\nJOIN customers c ON g.customer_id = c.id\nWHERE g.year = 2012\n  AND c.currency IN ('CZK', 'EUR');"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1478,
+    "SQL": "SELECT segment\nFROM your_table\nGROUP BY segment\nORDER BY SUM(consumption) ASC\nLIMIT 1;"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1486,
+    "SQL": "SELECT \n  (czk_count > eur_count) AS more_czk,\n  czk_count - eur_count AS more_by\nFROM (\n  SELECT \n    SUM(CASE WHEN payment_currency IN ('CZK','Kč','CZK - Czech koruna') THEN 1 ELSE 0 END) AS czk_count,\n    SUM(CASE WHEN payment_currency IN ('EUR','€','EUR - Euro') THEN 1 ELSE 0 END) AS eur_count\n  FROM companies\n  WHERE company_size = 'SME'\n) t;"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1490,
+    "SQL": "SELECT 100.0 * SUM(CASE WHEN consumption > 46.73 THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0) AS percent_above_46_73\nFROM customers\nWHERE region = 'LAM';"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1501,
+    "SQL": "SELECT DISTINCT gs.country\nFROM gas_stations gs\nJOIN transactions tr ON tr.gas_station_id = gs.id\nWHERE tr.transaction_date >= '2013-06-01' AND tr.transaction_date < '2013-07-01';"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1516,
+    "SQL": "SELECT COUNT(*) AS transactions_count\nFROM transactions\nWHERE currency = 'CZK'\n  AND paid_at >= '2012-08-26 06:00:00'\n  AND paid_at < '2012-08-26 12:00:00';"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1526,
+    "SQL": "SELECT\n  ((c2012.consumption - COALESCE(c2013.consumption,0)) / NULLIF(c2012.consumption,0)) AS decrease_rate\nFROM payments p\nJOIN consumption c2012 ON c2012.customer_id = p.customer_id AND c2012.year = 2012\nLEFT JOIN consumption c2013 ON c2013.customer_id = p.customer_id AND c2013.year = 2013\nWHERE p.amount = 634.8\n  AND DATE(p.payment_date) = '2012-08-25'\nLIMIT 1;"
   },
   {
-    "question_id": "debit_card_specializing",
-    "SQL": {}
+    "question_id": 1531,
+    "SQL": "WITH customer_currency_spend AS (\n  SELECT c.customer_id,\n         COALESCE(c.name, c.full_name, c.customer_name) AS customer_name,\n         o.currency,\n         SUM(oi.quantity * oi.unit_price) AS total_spent,\n         SUM(oi.quantity) AS total_quantity\n  FROM customers c\n  JOIN orders o ON o.customer_id = c.customer_id\n  JOIN order_items oi ON oi.order_id = o.order_id\n  GROUP BY c.customer_id, customer_name, o.currency\n)\nSELECT customer_id,\n       customer_name,\n       total_spent,\n       CASE WHEN total_quantity > 0 THEN total_spent / total_quantity END AS avg_price_per_item,\n       currency\nFROM customer_currency_spend\nORDER BY total_spent DESC\nLIMIT 1;"
   }
 ]
