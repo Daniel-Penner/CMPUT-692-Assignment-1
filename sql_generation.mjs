@@ -4,7 +4,7 @@ import fs from "node:fs";
 const schemas = JSON.parse(fs.readFileSync("input_data/dev_tables.json", "utf-8"));
 
 const client = new OpenAI({
-    apiKey: "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"
+    apiKey: "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"
 });
 
 function returnSchema(id){
@@ -27,6 +27,7 @@ try{
     const queries = JSON.parse(fs.readFileSync("input_data/queries.json", "utf-8"));
     for(const query of queries){
         const sql = await prompt(query.question, returnSchema(query.db_id));
+        console.log(sql);
         predictions.push({
             question_id: query.question_id,
             SQL: sql
@@ -36,4 +37,4 @@ try{
 } catch(error){
     console.error(error);
 }
-});
+})();
