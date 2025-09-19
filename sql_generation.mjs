@@ -1,10 +1,11 @@
 import OpenAI from "openai";
 import fs from "node:fs";
+import "dotenv/config";
 
 const schemas = JSON.parse(fs.readFileSync("input_data/dev_tables.json"));
 
 const client = new OpenAI({
-    apiKey: "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"
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 function returnSchema(id){
