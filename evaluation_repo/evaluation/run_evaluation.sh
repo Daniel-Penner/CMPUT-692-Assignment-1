@@ -24,8 +24,8 @@ output_log_path="../eval_result/${base_name}.txt"
 
 case $sql_dialect in
   "SQLite")
-    diff_json_path="../sqlite/mini_dev_sqlite_subset.jsonl"
-    ground_truth_path="../sqlite/mini_dev_sqlite_gold_fixed.sql"
+    diff_json_path="../sqlite/dev_sqlite_subset.jsonl"
+    ground_truth_path="../sqlite/dev_sqlite_gold.sql"
     ;;
   "PostgreSQL")
     diff_json_path="../postgresql/mini_dev_postgresql.jsonl"

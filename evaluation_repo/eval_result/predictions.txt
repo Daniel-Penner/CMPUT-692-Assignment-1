@@ -38,3 +38,163 @@ EX                   0.00                 0.00                 0.00             
 ===========================================================================================
 Finished EX evaluation for mini dev set
 
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   0.00                 0.00                 0.00                 0.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   5.00                 0.00                 0.00                 2.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   5.00                 0.00                 0.00                 2.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   5.00                 0.00                 0.00                 2.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   5.00                 0.00                 0.00                 2.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   5.00                 0.00                 0.00                 2.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   10.00                0.00                 0.00                 4.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   10.00                0.00                 0.00                 4.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   10.00                0.00                 0.00                 4.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   5.00                 0.00                 0.00                 2.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   10.00                0.00                 0.00                 4.00                
+===========================================================================================
+Finished EX evaluation for mini dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                20                   16                   14                   50                  
+======================================    EX   =====================================
+EX                   35.00                37.50                28.57                34.00               
+===========================================================================================
+Finished EX evaluation for mini dev set
+
