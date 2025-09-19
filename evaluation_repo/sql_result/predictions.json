@@ -1,202 +1,52 @@
-[
-  {
-    "question_id": 91,
-    "SQL": "SELECT year FROM unemployment WHERE year IN (1995,1996) GROUP BY year ORDER BY AVG(unemployment_ratio) DESC LIMIT 1;"
-  },
-  {
-    "question_id": 96,
-    "SQL": "SELECT COUNT(*) FROM customers WHERE statement_of_weekly_issuance = 'Yes' AND customer_type = 'Owner';"
-  },
-  {
-    "question_id": 101,
-    "SQL": "SELECT a.* FROM accounts a JOIN trades t ON a.account_id = t.account_id WHERE t.trading_date >= '1995-01-01' AND t.trading_date < '1996-01-01' AND t.trading_date = (SELECT MIN(trading_date) FROM trades WHERE trading_date >= '1995-01-01' AND trading_date < '1996-01-01');"
-  },
-  {
-    "question_id": 108,
-    "SQL": "SELECT t.amount FROM transactions t JOIN accounts a ON t.account_id = a.id WHERE a.client_id IN (SELECT l.client_id FROM loans l WHERE l.amount = (SELECT MAX(amount) FROM loans)) AND t.transaction_date >= a.opened_date ORDER BY t.transaction_date ASC LIMIT 1;"
-  },
-  {
-    "question_id": 117,
-    "SQL": "SELECT 100.0 * SUM(CASE WHEN status IN ('Fully Paid','Paid') AND (has_issue=0 OR LOWER(CAST(has_issue AS CHAR))='no' OR LOWER(CAST(issue AS CHAR)) IN ('no','none') OR issue IS NULL) THEN amount ELSE 0 END) / NULLIF(SUM(amount),0) AS percentage FROM loans;"
-  },
-  {
-    "question_id": 128,
-    "SQL": "SELECT district, COUNT(*) AS female_count FROM account_holders WHERE LOWER(gender) = 'female' GROUP BY district ORDER BY female_count DESC LIMIT 9;"
-  },
-  {
-    "question_id": 136,
-    "SQL": "SELECT account_id, COUNT(*) AS approved_loan_count FROM loans WHERE approval_date BETWEEN '1995-01-01' AND '1997-12-31' AND amount >= 250000 AND statement_issuance = 'Monthly' AND status = 'Approved' GROUP BY account_id;"
-  },
-  {
-    "question_id": 149,
-    "SQL": "SELECT DISTINCT at.name FROM account_types at JOIN accounts a ON a.account_type_id = at.id JOIN (SELECT district_id FROM residents GROUP BY district_id HAVING AVG(income) > 8000 AND AVG(income) <= 9000) d ON a.district_id = d.district_id WHERE at.eligible_for_loans = FALSE;"
-  },
-  {
-    "question_id": 169,
-    "SQL": "SELECT (sum_1997 - sum_1996)/NULLIF(sum_1996,0) AS growth_rate FROM (SELECT SUM(CASE WHEN EXTRACT(YEAR FROM l.date)=1996 THEN l.amount ELSE 0 END) AS sum_1996, SUM(CASE WHEN EXTRACT(YEAR FROM l.date)=1997 THEN l.amount ELSE 0 END) AS sum_1997 FROM loans l JOIN accounts a ON l.account_id=a.id JOIN clients c ON a.client_id=c.id WHERE LOWER(c.gender) IN ('m','male')) t;"
-  },
-  {
-    "question_id": 173,
-    "SQL": "SELECT (SELECT COUNT(*) FROM requests r WHERE r.account_number=3 AND (r.request_type='account_statement' OR r.request='account_statement' OR r.action='request_account_statement' OR r.type='statement_release')) AS statement_request_count, (SELECT d.aim FROM debits d WHERE d.amount=3539 LIMIT 1) AS aim_of_3539;"
-  },
-  {
-    "question_id": 393,
-    "SQL": "SELECT COUNT(*) FROM cards WHERE designer = 'John Avon' AND is_foil = FALSE AND is_powerful = FALSE;"
-  },
-  {
-    "question_id": 394,
-    "SQL": "SELECT COUNT(*) FROM cards WHERE border='white' AND powerful=TRUE;"
-  },
-  {
-    "question_id": 406,
-    "SQL": "SELECT DISTINCT c.id FROM cards c JOIN card_types ct ON c.id = ct.card_id JOIN legalities l ON c.id = l.card_id WHERE ct.type = 'Creature' AND l.status = 'legal';"
-  },
-  {
-    "question_id": 411,
-    "SQL": "SELECT artist.name FROM artist JOIN card ON card.artist_id = artist.id WHERE card.text = 'Das perfekte Gegenmittel zu einer dichten Formation';"
-  },
-  {
-    "question_id": 427,
-    "SQL": "SELECT DISTINCT c.lang FROM cards c JOIN sets s ON c.set_code = s.code WHERE s.name = 'Archenemy' AND s.code = 'ARC';"
-  },
-  {
-    "question_id": 432,
-    "SQL": "SELECT s.name FROM sets s JOIN cards c ON c.set_id = s.id WHERE s.language='Russian' GROUP BY s.id,s.name ORDER BY COUNT(*) DESC LIMIT 1;"
-  },
-  {
-    "question_id": 434,
-    "SQL": "SELECT COUNT(*) FROM sets s WHERE s.mtgo_code IS NULL AND EXISTS (SELECT 1 FROM set_languages sl WHERE sl.set_id = s.id AND sl.language = 'Japanese') AND NOT EXISTS (SELECT 1 FROM set_languages sl2 WHERE sl2.set_id = s.id AND sl2.language <> 'Japanese');"
-  },
-  {
-    "question_id": 477,
-    "SQL": "SELECT DISTINCT artist FROM cards WHERE setName='Coldsnap' AND artist IN ('Jeremy Jarvis','Aaron Miller','Chippy');"
-  },
-  {
-    "question_id": 507,
-    "SQL": "SELECT CASE WHEN total=0 THEN 0 ELSE ROUND(100.0*online_only/total,2) END AS percentage FROM (SELECT COUNT(DISTINCT ct.card_id) AS total, SUM(CASE WHEN COALESCE(ca.is_online_only,0)=1 THEN 1 ELSE 0 END) AS online_only FROM card_translations ct JOIN cards c ON ct.card_id=c.id LEFT JOIN card_availability ca ON ca.card_id=c.id WHERE ct.language IN ('pt-BR','pt_BR','pt','Portuguese (Brazil)','Brazilian Portuguese')) t;"
-  },
-  {
-    "question_id": 513,
-    "SQL": "SELECT s.id FROM sets s JOIN cards c ON c.set_id = s.id WHERE s.expansion_type='Commander' AND (c.is_alchemy IS NULL OR c.is_alchemy=FALSE) GROUP BY s.id ORDER BY COUNT(*) DESC LIMIT 1;"
-  },
-  {
-    "question_id": 547,
-    "SQL": "SELECT COUNT(*) FROM Posts p JOIN Users u ON p.OwnerUserId = u.Id WHERE u.Age >= 60 AND p.Score > 19;"
-  },
-  {
-    "question_id": 550,
-    "SQL": "SELECT p.Body FROM Posts p JOIN Tags t ON p.Id = t.ExcerptPostId ORDER BY t.Count DESC LIMIT 1;"
-  },
-  {
-    "question_id": 556,
-    "SQL": "SELECT AVG(badge_count) FROM (SELECT u.Id AS user_id, COUNT(b.Id) AS badge_count FROM Users u LEFT JOIN Badges b ON u.Id = b.UserId WHERE u.Views > 200 GROUP BY u.Id) AS sub;"
-  },
-  {
-    "question_id": 558,
-    "SQL": "SELECT COALESCE(SUM(vote_count),0) FROM votes WHERE user_id=58 AND DATE(vote_date)='2010-07-19';"
-  },
-  {
-    "question_id": 572,
-    "SQL": "SELECT ViewCount FROM Posts WHERE Title = 'Integration of Weka and/or RapidMiner into Informatica PowerCenter/Developer';"
-  },
-  {
-    "question_id": 578,
-    "SQL": "SELECT u.DisplayName, u.Reputation FROM Users u JOIN Posts p ON p.OwnerUserId = u.Id WHERE p.Title = 'Understanding what Dassault iSight is doing?';"
-  },
-  {
-    "question_id": 587,
-    "SQL": "SELECT p.title, c.comment, AVG(v.view_count) AS avg_view_count FROM posts p JOIN post_tags pt ON pt.post_id = p.id JOIN tags t ON t.id = pt.tag_id JOIN views v ON v.post_id = p.id LEFT JOIN comments c ON c.post_id = p.id WHERE t.name = 'humor' GROUP BY p.id, p.title, c.comment;"
-  },
-  {
-    "question_id": 598,
-    "SQL": "SELECT CASE WHEN cnt2010=0 THEN NULL ELSE (cnt2011-cnt2010)*100.0/cnt2010 END AS pct_difference FROM (SELECT SUM(CASE WHEN YEAR(awarded_at)=2010 THEN 1 ELSE 0 END) AS cnt2010, SUM(CASE WHEN YEAR(awarded_at)=2011 THEN 1 ELSE 0 END) AS cnt2011 FROM student_badges) AS sub;"
-  },
-  {
-    "question_id": 639,
-    "SQL": "SELECT CASE WHEN COUNT(*)=0 THEN 0 ELSE 100.0*SUM(CASE WHEN COALESCE(p.Tags,'') LIKE '%<r>%' THEN 1 ELSE 0 END)/COUNT(*) END AS percentage FROM Posts p WHERE p.OwnerDisplayName='Community' OR p.OwnerUserId=(SELECT Id FROM Users WHERE DisplayName='Community' LIMIT 1);"
-  },
-  {
-    "question_id": 701,
-    "SQL": "SELECT CASE WHEN t.total=0 THEN 0 ELSE ROUND(100.0*t.above/t.total,2) END AS percentage FROM (SELECT SUM(CASE WHEN p.score>50 THEN 1 ELSE 0 END) AS above, COUNT(*) AS total FROM posts p WHERE p.owner_user_id IN (SELECT u.id FROM users u WHERE u.reputation=(SELECT MAX(reputation) FROM users))) t;"
-  },
-  {
-    "question_id": 789,
-    "SQL": "SELECT AVG(weight) AS avg_weight FROM heroes WHERE species = 'Alien';"
-  },
-  {
-    "question_id": 793,
-    "SQL": "SELECT COUNT(*) AS male_count FROM superheroes WHERE LOWER(race) LIKE '%god%' AND LOWER(race) LIKE '%eternal%' AND LOWER(gender) = 'male';"
-  },
-  {
-    "question_id": 795,
-    "SQL": "SELECT COUNT(*) AS neutral_count FROM superheroes WHERE LOWER(alignment) = 'neutral';"
-  },
-  {
-    "question_id": 806,
-    "SQL": "SELECT eye_color FROM superheroes WHERE full_name = 'Karen Beecher-Duncan';"
-  },
-  {
-    "question_id": 814,
-    "SQL": "SELECT DISTINCT s.skin_colour FROM superheroes s JOIN attributes a ON s.id = a.superhero_id WHERE a.value = 100;"
-  },
-  {
-    "question_id": 817,
-    "SQL": "SELECT race FROM superhero WHERE hair_color = 'blue' AND gender = 'male';"
-  },
-  {
-    "question_id": 823,
-    "SQL": "SELECT COUNT(*) AS female_count FROM superheroes WHERE LOWER(gender) IN ('female','f') AND LOWER(publisher)='marvel comics';"
-  },
-  {
-    "question_id": 829,
-    "SQL": "SELECT CASE WHEN dc.cnt>mv.cnt THEN 'DC Comics' WHEN dc.cnt<mv.cnt THEN 'Marvel Comics' ELSE 'Tie' END AS more_creator, ABS(dc.cnt-mv.cnt) AS difference FROM (SELECT COUNT(*) AS cnt FROM superheroes WHERE publisher IN ('DC','DC Comics')) dc, (SELECT COUNT(*) AS cnt FROM superheroes WHERE publisher IN ('Marvel','Marvel Comics')) mv;"
-  },
-  {
-    "question_id": 834,
-    "SQL": "SELECT CASE WHEN total_count=0 THEN 0 ELSE 100.0*female_count/total_count END AS female_percentage FROM (SELECT SUM(CASE WHEN LOWER(s.gender) IN ('female','f','woman') THEN 1 ELSE 0 END) AS female_count, COUNT(*) AS total_count FROM superheroes s JOIN creators c ON s.creator_id = c.id WHERE c.name = 'George Lucas') t;"
-  },
-  {
-    "question_id": 835,
-    "SQL": "SELECT 100.0 * SUM(CASE WHEN LOWER(alignment)='good' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0) AS percentage_good FROM characters WHERE LOWER(publisher)='marvel comics';"
-  },
-  {
-    "question_id": 1470,
-    "SQL": "SELECT COUNT(*) FROM gas_stations s WHERE s.country_code='CZE' AND EXISTS (SELECT 1 FROM station_fuels sf JOIN fuels f ON sf.fuel_id=f.id WHERE sf.station_id=s.id AND f.name='Premium');"
-  },
-  {
-    "question_id": 1477,
-    "SQL": "SELECT EXTRACT(YEAR FROM payment_date) AS year FROM payments WHERE currency='EUR' AND LOWER(product)='gas' GROUP BY EXTRACT(YEAR FROM payment_date) ORDER BY SUM(amount) DESC LIMIT 1;"
-  },
-  {
-    "question_id": 1476,
-    "SQL": "SELECT ABS(SUM(CASE WHEN c.currency='CZK' THEN g.amount ELSE 0 END)-SUM(CASE WHEN c.currency='EUR' THEN g.amount ELSE 0 END)) AS difference_in_gas_consumption_2012 FROM customers c JOIN gas_consumption g ON c.customer_id=g.customer_id WHERE EXTRACT(YEAR FROM g.reading_date)=2012;"
-  },
-  {
-    "question_id": 1478,
-    "SQL": "SELECT segment FROM segments WHERE consumption = (SELECT MIN(consumption) FROM segments);"
-  },
-  {
-    "question_id": 1486,
-    "SQL": "SELECT CASE WHEN czk>eur THEN true ELSE false END AS more_czk, CASE WHEN czk>eur THEN czk-eur ELSE NULL END AS more_by FROM (SELECT SUM(CASE WHEN i.currency='CZK' THEN 1 ELSE 0 END) AS czk, SUM(CASE WHEN i.currency='EUR' THEN 1 ELSE 0 END) AS eur FROM invoices i JOIN customers c ON i.customer_id=c.id WHERE c.size='SME') t;"
-  },
-  {
-    "question_id": 1490,
-    "SQL": "SELECT 100.0 * SUM(CASE WHEN consumed > 46.73 THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0) AS percent FROM customers WHERE customer_type = 'LAM';"
-  },
-  {
-    "question_id": 1501,
-    "SQL": "SELECT DISTINCT gs.country FROM gas_stations gs JOIN transactions t ON t.gas_station_id = gs.id WHERE t.transaction_date >= '2013-06-01' AND t.transaction_date < '2013-07-01';"
-  },
-  {
-    "question_id": 1516,
-    "SQL": "SELECT COUNT(*) FROM transactions WHERE paid = TRUE AND currency = 'CZK' AND DATE(paid_at) = '2012-08-26' AND EXTRACT(HOUR FROM paid_at) BETWEEN 6 AND 11;"
-  },
-  {
-    "question_id": 1526,
-    "SQL": "SELECT ((c2012.consumption - c2013.consumption) / NULLIF(c2012.consumption,0)) AS decrease_rate FROM consumptions c2012 JOIN consumptions c2013 ON c2012.customer_id = c2013.customer_id AND c2013.year = 2013 JOIN payments p ON p.customer_id = c2012.customer_id WHERE c2012.year = 2012 AND p.amount = 634.8 AND DATE(p.payment_date) = '2012-08-25' LIMIT 1;"
-  },
-  {
-    "question_id": 1531,
-    "SQL": "SELECT c.id AS customer_id, c.name AS customer_name, s.total_spent, (s.total_spent/NULLIF(s.total_quantity,0)) AS avg_price_per_single_item, s.currency FROM (SELECT o.customer_id, SUM(oi.unit_price*oi.quantity) AS total_spent, SUM(oi.quantity) AS total_quantity, MAX(o.currency) AS currency FROM orders o JOIN order_items oi ON o.id=oi.order_id GROUP BY o.customer_id) s JOIN customers c ON c.id=s.customer_id ORDER BY s.total_spent DESC LIMIT 1;"
-  }
-]
+{
+  "0": "SELECT year, AVG(unemployment_ratio) AS avg_ratio FROM unemployment WHERE year IN (1995,1996) GROUP BY year ORDER BY avg_ratio DESC LIMIT 1;\tfinancial",
+  "1": "SELECT COUNT(*) AS count FROM customers WHERE statement_frequency='Weekly' AND customer_type='Owner';\tfinancial",
+  "2": "SELECT * FROM accounts WHERE strftime('%Y', trading_date)='1995' AND trading_date=(SELECT MIN(trading_date) FROM accounts WHERE strftime('%Y', trading_date)='1995');\tfinancial",
+  "3": "WITH top_client AS (SELECT client_id FROM loans WHERE amount = (SELECT MAX(amount) FROM loans) LIMIT 1), acc AS (SELECT opened_at FROM accounts WHERE client_id = (SELECT client_id FROM top_client) LIMIT 1) SELECT t.amount FROM transactions t WHERE t.client_id = (SELECT client_id FROM top_client) AND t.created_at >= (SELECT opened_at FROM acc) ORDER BY t.created_at ASC LIMIT 1;\tfinancial",
+  "4": "SELECT ROUND(100.0 * SUM(CASE WHEN loan_status='Fully Paid' THEN loan_amnt ELSE 0 END) / NULLIF(SUM(loan_amnt),0),2) AS percent_fully_paid_no_issue FROM loans;\tfinancial",
+  "5": "SELECT district, COUNT(*) AS female_count FROM account_holders WHERE LOWER(gender) = 'female' GROUP BY district ORDER BY female_count DESC LIMIT 9;\tfinancial",
+  "6": "SELECT COUNT(*) FROM loans l JOIN accounts a ON l.account_id = a.id WHERE l.amount >= 250000 AND l.approved_date BETWEEN '1995-01-01' AND '1997-12-31' AND a.statement_frequency = 'monthly';\tfinancial",
+  "7": "SELECT DISTINCT at.name FROM account_types at WHERE at.eligible_for_loan = 0 AND EXISTS (SELECT 1 FROM accounts a JOIN residents r ON r.district_id = a.district_id WHERE a.account_type_id = at.id GROUP BY a.district_id HAVING AVG(r.income) > 8000 AND AVG(r.income) <= 9000);\tfinancial",
+  "8": "SELECT c.id AS client_id, c.name, ((IFNULL(SUM(CASE WHEN COALESCE(CAST(l.year AS TEXT), strftime('%Y', l.date))='1997' THEN l.amount ELSE 0 END),0) - IFNULL(SUM(CASE WHEN COALESCE(CAST(l.year AS TEXT), strftime('%Y', l.date))='1996' THEN l.amount ELSE 0 END),0)) / NULLIF(IFNULL(SUM(CASE WHEN COALESCE(CAST(l.year AS TEXT), strftime('%Y', l.date))='1996' THEN l.amount ELSE 0 END),0),0)) AS growth_rate FROM clients c JOIN accounts a ON a.client_id = c.id JOIN loans l ON l.account_id = a.id WHERE lower(c.gender) IN ('m','male') GROUP BY c.id, c.name;\tfinancial",
+  "9": "SELECT (SELECT COUNT(*) FROM requests WHERE account_number=3 AND request_text LIKE '%account statement%') AS statement_request_count,(SELECT purpose FROM transactions WHERE amount<0 GROUP BY purpose HAVING ABS(SUM(amount))=3539 LIMIT 1) AS aim_of_debit_3539;\tfinancial",
+  "10": "SELECT COUNT(DISTINCT c.id) FROM cards c JOIN prints p ON p.card_id = c.id WHERE c.designer = 'John Avon' AND p.is_foil = 1 AND p.is_powerful = 0;\tcard_games",
+  "11": "SELECT COUNT(*) FROM cards WHERE border='white' AND powerful=1;\tcard_games",
+  "12": "SELECT c.id, l.status FROM cards AS c JOIN legalities AS l ON c.id = l.card_id WHERE c.type_line LIKE '%Creature%' ORDER BY c.id;\tcard_games",
+  "13": "SELECT artist FROM cards WHERE text = 'Das perfekte Gegenmittel zu einer dichten Formation';\tcard_games",
+  "14": "SELECT DISTINCT cards.language FROM cards JOIN sets ON cards.set_id = sets.id WHERE sets.name='Archenemy' AND sets.code='ARC';\tcard_games",
+  "15": "SELECT sets.name FROM sets JOIN cards ON cards.set_id=sets.id WHERE sets.language='Russian' OR cards.language='Russian' GROUP BY sets.id,sets.name ORDER BY COUNT(DISTINCT cards.id) DESC LIMIT 1;\tcard_games",
+  "16": "SELECT COUNT(*) FROM (SELECT s.code FROM sets s JOIN cards c ON s.code=c.set_code WHERE s.digital=0 GROUP BY s.code HAVING COUNT(DISTINCT c.language)=1 AND MIN(c.language)='Japanese') AS t;\tcard_games",
+  "17": "SELECT DISTINCT artist FROM cards WHERE set_name='Coldsnap' AND artist IN ('Jeremy Jarvis','Aaron Miller','Chippy');\tcard_games",
+  "18": "SELECT 100.0 * SUM(CASE WHEN (COALESCE(s.online_only,s.is_online_only,0)=1 OR s.availability IN ('online','online-only','online_only')) THEN 1 ELSE 0 END) / COUNT(*) AS percentage FROM sets s WHERE EXISTS (SELECT 1 FROM cards c JOIN translations t ON t.card_id = c.id JOIN languages l ON l.id = t.language_id WHERE c.set_id = s.id AND (l.code IN ('pt-BR','pt_BR','pt') OR l.name IN ('Portuguese (Brazil)','Brazilian Portuguese','Portuguese - Brazil')));\tcard_games",
+  "19": "SELECT s.id FROM sets s JOIN cards c ON c.set_id = s.id WHERE s.expansion_type = 'Commander' AND COALESCE(c.is_alchemy,0) = 0 GROUP BY s.id ORDER BY COUNT(*) DESC LIMIT 1;\tcard_games",
+  "20": "SELECT COUNT(*) FROM Posts p JOIN Users u ON p.OwnerUserId = u.Id WHERE u.Age > 40 AND p.Score > 19;\tcodebase_community",
+  "21": "SELECT p.Body FROM Posts p JOIN TagWiki tw ON tw.ExcerptPostId = p.Id WHERE tw.TagName = (SELECT TagName FROM Tags ORDER BY Count DESC LIMIT 1) LIMIT 1;\tcodebase_community",
+  "22": "SELECT AVG(badge_count) FROM (SELECT u.Id, COUNT(b.Id) AS badge_count FROM Users u LEFT JOIN Badges b ON b.UserId = u.Id WHERE u.Views > 200 GROUP BY u.Id) AS t;\tcodebase_community",
+  "23": "SELECT COUNT(*) FROM votes WHERE user_id = 58 AND DATE(created_at) = '2010-07-19';\tcodebase_community",
+  "24": "SELECT ViewCount FROM Posts WHERE Title='Integration of Weka and/or RapidMiner into Informatica PowerCenter/Developer';\tcodebase_community",
+  "25": "SELECT Users.DisplayName, Users.Reputation FROM Users JOIN Posts ON Posts.OwnerUserId = Users.Id WHERE Posts.Title = 'Understanding what Dassault iSight is doing?';\tcodebase_community",
+  "26": "SELECT p.title, c.comment, AVG(p.view_count) OVER () AS average_view_count FROM posts p JOIN post_tags pt ON pt.post_id = p.id JOIN tags t ON t.id = pt.tag_id AND t.name = 'humor' LEFT JOIN comments c ON c.post_id = p.id;\tcodebase_community",
+  "27": "SELECT CASE WHEN c0=0 THEN NULL ELSE (c1-c0)*100.0/c0 END AS percent_difference FROM (SELECT SUM(CASE WHEN strftime('%Y',Date)='2010' THEN 1 ELSE 0 END) AS c0, SUM(CASE WHEN strftime('%Y',Date)='2011' THEN 1 ELSE 0 END) AS c1 FROM Badges WHERE Name='Student');\tcodebase_community",
+  "28": "SELECT CASE WHEN COUNT(*)=0 THEN 0 ELSE 100.0 * SUM(CASE WHEN Tags LIKE '%<r>%' THEN 1 ELSE 0 END) / COUNT(*) END AS percent_r FROM Posts WHERE OwnerDisplayName='Community';\tcodebase_community",
+  "29": "SELECT CASE WHEN COUNT(*)=0 THEN 0.0 ELSE 100.0*SUM(CASE WHEN p.score>50 THEN 1 ELSE 0 END)/COUNT(*) END AS percentage FROM posts p WHERE p.user_id=(SELECT u.id FROM users u ORDER BY u.influence DESC LIMIT 1);\tcodebase_community",
+  "30": "SELECT AVG(weight) AS average_weight FROM heroes WHERE LOWER(species)='alien';\tsuperhero",
+  "31": "SELECT COUNT(*) FROM superheroes WHERE LOWER(race) LIKE '%god%' AND LOWER(race) LIKE '%eternal%' AND LOWER(gender)='male';\tsuperhero",
+  "32": "SELECT COUNT(*) AS neutral_count FROM superheroes WHERE LOWER(alignment)='neutral';\tsuperhero",
+  "33": "SELECT eye_color FROM superheroes WHERE full_name='Karen Beecher-Duncan';\tsuperhero",
+  "34": "SELECT s.skin_colour FROM superheroes s WHERE s.id IN (SELECT a.superhero_id FROM attributes a WHERE a.value = 100);\tsuperhero",
+  "35": "SELECT race FROM superheroes WHERE LOWER(hair_color)='blue' AND LOWER(gender)='male';\tsuperhero",
+  "36": "SELECT COUNT(DISTINCT id) FROM (SELECT id FROM characters WHERE LOWER(gender)='female' AND LOWER(COALESCE(publisher,''))='marvel comics' UNION SELECT c.id FROM characters c JOIN publishers p ON c.publisher_id=p.id WHERE LOWER(c.gender)='female' AND LOWER(p.name)='marvel comics' UNION SELECT id FROM superheroes WHERE LOWER(gender)='female' AND LOWER(COALESCE(publisher,''))='marvel comics' UNION SELECT s.id FROM superheroes s JOIN publishers p2 ON s.publisher_id=p2.id WHERE LOWER(s.gender)='female' AND LOWER(p2.name)='marvel comics') t;\tsuperhero",
+  "37": "SELECT CASE WHEN dc>marvel THEN 'DC' WHEN marvel>dc THEN 'Marvel Comics' ELSE 'Tie' END AS winner, ABS(dc-marvel) AS difference FROM (SELECT (SELECT COUNT(*) FROM superheroes WHERE publisher='DC') AS dc, (SELECT COUNT(*) FROM superheroes WHERE publisher='Marvel Comics') AS marvel);\tsuperhero",
+  "38": "SELECT CASE WHEN COUNT(*)=0 THEN 0 ELSE 100.0*SUM(CASE WHEN lower(gender)='female' THEN 1 ELSE 0 END)/COUNT(*) END AS percentage_female FROM superheroes WHERE lower(creator)='george lucas';\tsuperhero",
+  "39": "SELECT ROUND(100.0*SUM(CASE WHEN LOWER(alignment)='good' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0),2) AS percent_good FROM superheroes WHERE LOWER(publisher) LIKE '%marvel%';\tsuperhero",
+  "40": "SELECT COUNT(DISTINCT s.id) FROM stations s JOIN station_fuels sf ON sf.station_id = s.id JOIN fuels f ON f.id = sf.fuel_id WHERE s.country = 'CZE' AND f.name = 'Premium';\tdebit_card_specializing",
+  "41": "SELECT strftime('%Y', payment_date) AS year FROM payments WHERE (fuel='gas' OR fuel='Gas' OR type='gas' OR type='Gas') AND currency='EUR' GROUP BY year ORDER BY SUM(amount) DESC LIMIT 1;\tdebit_card_specializing",
+  "42": "SELECT (COALESCE((SELECT SUM(gas_consumption) FROM invoices WHERE currency='CZK' AND year=2012),0)-COALESCE((SELECT SUM(gas_consumption) FROM invoices WHERE currency='EUR' AND year=2012),0)) AS difference;\tdebit_card_specializing",
+  "43": "SELECT segment FROM segments WHERE consumption = (SELECT MIN(consumption) FROM segments);\tdebit_card_specializing",
+  "44": "SELECT CASE WHEN czk>eur THEN 1 ELSE 0 END AS more_czk_than_eur, czk, eur, (czk-eur) AS how_many_more FROM (SELECT SUM(CASE WHEN LOWER(currency) IN ('czech koruna','czk','koruna') THEN 1 ELSE 0 END) AS czk, SUM(CASE WHEN LOWER(currency) IN ('euro','eur','€') THEN 1 ELSE 0 END) AS eur FROM companies WHERE LOWER(company_size) IN ('sme','small and medium','small & medium','small and medium enterprise'));\tdebit_card_specializing",
+  "45": "SELECT CASE WHEN total=0 THEN 0 ELSE ROUND(100.0*greater/total,2) END AS percent FROM (SELECT SUM(CASE WHEN region='LAM' AND consumed>46.73 THEN 1 ELSE 0 END) AS greater, SUM(CASE WHEN region='LAM' THEN 1 ELSE 0 END) AS total FROM customers);\tdebit_card_specializing",
+  "46": "SELECT DISTINCT gs.country FROM gas_stations gs JOIN transactions t ON t.gas_station_id = gs.id WHERE date(t.transaction_date) BETWEEN '2013-06-01' AND '2013-06-30';\tdebit_card_specializing",
+  "47": "SELECT COUNT(*) FROM transactions WHERE currency='CZK' AND (paid=1 OR paid='t' OR paid='true' OR status='paid' OR payment_status='paid') AND date(created_at)='2012-08-26' AND time(created_at)<'12:00:00';\tdebit_card_specializing",
+  "48": "SELECT (c2012.consumption - c2013.consumption)/NULLIF(c2012.consumption,0) AS decrease_rate FROM consumption c2012 JOIN consumption c2013 ON c2012.customer_id = c2013.customer_id AND c2013.year = 2013 JOIN payment p ON p.customer_id = c2012.customer_id WHERE c2012.year = 2012 AND p.amount = 634.8 AND date(p.payment_date) = '2012-08-25' LIMIT 1;\tdebit_card_specializing",
+  "49": "SELECT c.id AS customer_id,c.name AS customer_name,cs.total_spend,(cs.total_spend/NULLIF(cs.total_qty,0)) AS avg_price_per_item,(SELECT o.currency FROM orders o JOIN order_items oi2 ON o.id=oi2.order_id WHERE o.customer_id=c.id GROUP BY o.currency ORDER BY SUM(oi2.unit_price*oi2.quantity) DESC LIMIT 1) AS currency FROM customers c JOIN (SELECT o.customer_id,SUM(oi.unit_price*oi.quantity) AS total_spend,SUM(oi.quantity) AS total_qty FROM orders o JOIN order_items oi ON o.id=oi.order_id GROUP BY o.customer_id) cs ON c.id=cs.customer_id ORDER BY cs.total_spend DESC LIMIT 1;\tdebit_card_specializing"
+}

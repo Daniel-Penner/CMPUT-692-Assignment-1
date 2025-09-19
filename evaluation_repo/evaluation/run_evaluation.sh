@@ -9,6 +9,8 @@ predicted_sql_path='../sql_result/predictions.json' # Replace with your predict 
 # predicted_sql_path='../sql_result/predict_mini_dev_gpt-4-32k_cot_PostgreSQL.json' # Replace with your predict sql json path
 # predicted_sql_path='../sql_result/predict_mini_dev_gpt-4-32k_cot_MySQL.json' # Replace with your predict sql json path
 
+echo "Predicted SQL Path: $predicted_sql_path"; head -n 1 "$predicted_sql_path"
+
 sql_dialect="SQLite" # ONLY Modify this
 # sql_dialect="PostgreSQL" # ONLY Modify this
 # sql_dialect="MySQL" # ONLY Modify this
@@ -22,8 +24,8 @@ output_log_path="../eval_result/${base_name}.txt"
 
 case $sql_dialect in
   "SQLite")
-    diff_json_path="../sqlite/mini_dev_sqlite.jsonl"
-    ground_truth_path="../sqlite/mini_dev_sqlite_gold.sql"
+    diff_json_path="../sqlite/mini_dev_sqlite_subset.jsonl"
+    ground_truth_path="../sqlite/mini_dev_sqlite_gold_fixed.sql"
     ;;
   "PostgreSQL")
     diff_json_path="../postgresql/mini_dev_postgresql.jsonl"
