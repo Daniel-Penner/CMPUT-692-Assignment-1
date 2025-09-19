@@ -37,7 +37,7 @@ try {
     const { question_id, SQL } = predictions[i];
     const db_id = queries.find(q => q.question_id === question_id).db_id;
     const oneLineSQL = String(SQL).replace(/\s+/g, " ").trim();
-    outDict[String(i)] = `${oneLineSQL}\t${db_id}`;
+    outDict[String(question_id)] = `${oneLineSQL}\t${db_id}`;
   }
 
   fs.writeFileSync(
