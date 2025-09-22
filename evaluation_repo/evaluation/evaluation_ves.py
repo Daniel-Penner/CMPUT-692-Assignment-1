@@ -1,3 +1,4 @@
+PYTHON="/c/Users/danie/AppData/Local/Programs/Python/Python312/python.exe"
 import sys
 import json
 import numpy as np
@@ -55,7 +56,7 @@ def iterated_execute_sql(
     reward = 0
     time_ratio = 0
     if set(predicted_res) == set(ground_truth_res):
-        for _ in range(iterate_num):
+        for i in range(iterate_num):
             predicted_time = execute_sql(
                 predicted_sql, db_path, sql_dialect, return_time=True
             )
@@ -63,6 +64,9 @@ def iterated_execute_sql(
                 ground_truth, db_path, sql_dialect, return_time=True
             )
             diff_list.append(ground_truth_time / predicted_time)
+
+            # Logging every iteration
+            print(f"[R-VES] Iteration {i+1}/{iterate_num} done", flush=True)
         processed_diff_list = clean_abnormal(diff_list)
         time_ratio = sum(processed_diff_list) / len(processed_diff_list)
     if time_ratio == 0:

@@ -1,7 +1,16 @@
 import json
-import psycopg2
-import pymysql
 import sqlite3
+
+try:
+    import psycopg2
+except ImportError:
+    psycopg2 = None
+
+try:
+    import pymysql
+except ImportError:
+    pymysql = None
+
 
 def load_jsonl(file_path):
     data = []
@@ -46,12 +55,17 @@ def connect_db(sql_dialect, db_path):
     if sql_dialect == "SQLite":
         conn = sqlite3.connect(db_path)
     elif sql_dialect == "MySQL":
+        if pymysql is None:
+            raise ImportError("PyMySQL not installed, but sql_dialect=MySQL")
         conn = connect_mysql()
     elif sql_dialect == "PostgreSQL":
+        if psycopg2 is None:
+            raise ImportError("psycopg2 not installed, but sql_dialect=PostgreSQL")
         conn = connect_postgresql()
     else:
         raise ValueError("Unsupported SQL dialect")
     return conn
+
 
 
 def execute_sql(predicted_sql, ground_truth, db_path, sql_dialect, calculate_func):

@@ -49,10 +49,10 @@ def run_sqls_parallel(
     pool = mp.Pool(processes=num_cpus)
     for i, sql_pair in enumerate(sqls):
         predicted_sql, ground_truth = sql_pair
-        print(f"[{i}] DB: {db_places[i]}")
-        print(f"  PRED: {predicted_sql}")
-        print(f"  GOLD: {ground_truth}")
-        print("-" * 80)
+#       print(f"[{i}] DB: {db_places[i]}")
+#        print(f"  PRED: {predicted_sql}")
+#        print(f"  GOLD: {ground_truth}")
+#        print("-" * 80)
         pool.apply_async(
             execute_model,
             args=(
