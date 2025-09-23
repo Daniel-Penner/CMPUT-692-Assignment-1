@@ -1,4 +1,3 @@
-PYTHON="/c/Users/danie/AppData/Local/Programs/Python/Python312/python.exe"
 import sys
 import json
 import numpy as np
@@ -113,8 +112,8 @@ def run_sqls_parallel(
     sqls,
     db_places,
     num_cpus=1,
-    iterate_num=100,
-    meta_time_out=30.0,
+    iterate_num=10,
+    meta_time_out=2.0,
     sql_dialect="SQLite",
 ):
     pool = mp.Pool(processes=num_cpus)
